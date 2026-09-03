@@ -12,6 +12,98 @@
 
 [![Release](https://img.shields.io/github/release/freecad/freecad.svg)](https://github.com/freecad/freecad/releases/latest) [![Crowdin](https://d322cqt584bo4o.cloudfront.net/freecad/localized.svg)](https://crowdin.com/project/freecad)
 
+Historical Python package store prototype
+-----------------------------------------
+
+> [!IMPORTANT]
+> This branch is an experimental integration test. It is not an official
+> FreeCAD packaging mechanism and is not intended for production use.
+
+This branch tests a metadata-driven Python dependency model for applications
+that embed CPython. It is designed to prevent an unrelated package upgrade in
+a user or system Python installation from silently changing the Python
+packages loaded by FreeCAD.
+
+The model keeps package releases side-by-side in an additive historical store:
+
+```text
+~/.python/packages/
+    PySide6/
+        6.8.3/
+    requests/
+        2.32.5/
+```
+
+FreeCAD declares its direct Python requirements in `pyproject.toml` and records
+the tested, resolved dependency closure in `pylock.toml`. The experimental
+[CPython historical-store branch](https://github.com/JustTryingToGetSomeWorkDone/cpython/tree/metadata-historical-store-prototype-3.11)
+uses that metadata while resolving otherwise ordinary imports such as
+`import requests`.
+
+### Why this exists
+
+FreeCAD embeds Python and loads native Qt bindings. A package found in a user
+site directory can be a different version from the Qt, PySide, or Shiboken
+libraries used to build FreeCAD, potentially causing import failures or native
+crashes. Application-specific package directories and virtual environments can
+isolate the problem, but they duplicate packages and still require environment
+management.
+
+This prototype instead asks whether project metadata and a permanent,
+versioned store can provide deterministic imports without replacing historical
+versions or changing unversioned Python syntax. A compatible ordinary
+installation remains usable; the store is selected when the ordinary
+distribution does not satisfy the project metadata.
+
+### Changes in this branch
+
+The executable FreeCAD source code itself is unchanged. Besides this README
+explanation, the branch adds only:
+
+- `pyproject.toml`, declaring the direct Python dependencies tested by this
+  integration;
+- `pylock.toml`, pinning the resolved versions, artifacts, and hashes used by
+  the test.
+
+The direct dependencies currently declared are `defusedxml`, `PySide6`,
+`requests`, `scour`, and `shiboken6`. Their transitive dependencies are recorded
+in the lock file.
+
+### Running the integration test
+
+Build FreeCAD against the modified CPython 3.11 branch and populate the store
+with the versions recorded in `pylock.toml` using the companion experimental
+pip implementation. The pip changes are separate and are not included in this
+repository.
+
+Because FreeCAD is an embedded host, explicitly point the interpreter at this
+project's metadata when launching it:
+
+```bash
+export CPYTHON_INSTALL=/path/to/custom-cpython-install
+export FREECAD_SOURCE=/path/to/FreeCAD
+export FREECAD_BUILD=/path/to/FreeCAD-build
+
+env \
+    LD_LIBRARY_PATH="$CPYTHON_INSTALL/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" \
+    PYTHONHISTORICALPROJECT="$FREECAD_SOURCE" \
+    "$FREECAD_BUILD/bin/FreeCAD"
+```
+
+`LD_LIBRARY_PATH` is needed when the custom `libpython` is installed in a
+nonstandard library directory. `PYTHONPATH` pointing to the modified pip source
+is needed only when invoking that pip checkout; it is not part of the FreeCAD
+runtime configuration.
+
+### Prototype boundaries
+
+This integration does not replace FreeCAD's package manager, redesign Python
+packaging, download missing packages at import time, or solve native ABI and
+shared-library compatibility. It also does not demonstrate simultaneous use of
+multiple releases of the same import name in one process. The current metadata
+is an integration-test dependency set, not a claim that every optional Python
+dependency used by every FreeCAD workbench has been catalogued.
+
 <img src="/.github/images/partdesign.png" width="800"/>
 
 Overview
