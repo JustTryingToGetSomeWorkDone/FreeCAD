@@ -66,8 +66,8 @@ explanation, the branch adds only:
   the test.
 
 The direct dependencies currently declared are `defusedxml`, `PySide6`,
-`requests`, `scour`, and `shiboken6`. Their transitive dependencies are recorded
-in the lock file.
+`requests`, `scour`, `shiboken6`, and `typing_extensions`. Their transitive
+dependencies are recorded in the lock file.
 
 ### Running the integration test
 
