@@ -65,9 +65,9 @@ explanation, the branch adds only:
 - `pylock.toml`, pinning the resolved versions, artifacts, and hashes used by
   the test.
 
-The direct dependencies currently declared are `defusedxml`, `PySide6`,
-`requests`, `scour`, `shiboken6`, and `typing_extensions`. Their transitive
-dependencies are recorded in the lock file.
+The direct dependencies currently declared are `defusedxml`, `ifcopenshell`,
+`numpy`, `PySide6`, `requests`, `scour`, `shiboken6`, and `typing_extensions`.
+Their transitive dependencies are recorded in the lock file.
 
 ### Running the integration test
 
