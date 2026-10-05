@@ -57,6 +57,20 @@ Compiling
 See the [Developers Handbook – Getting Started](https://freecad.github.io/DevelopersHandbook/gettingstarted/)
 for build instructions.
 
+Historical Python-store 3.13 TODO
+----------------------------------
+
+When configuring the experimental `historical-python-store-3.13` build,
+FreeCAD found the native IfcOpenShell dependency but reported:
+
+> Could not find ifcopenshell Python package runtime dependency. IFC files support disabled.
+
+The Pixi environment contains IfcOpenShell, but its conda-installed package
+does not expose the Python distribution metadata that FreeCAD's package check
+expects. Investigate and fix the detection/packaging integration so that
+Python IFC support is enabled without weakening the historical package-store
+isolation. Keep this issue in mind when testing packaged builds and AppImages.
+
 
 Reporting Issues
 ---------
