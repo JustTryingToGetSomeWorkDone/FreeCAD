@@ -91,6 +91,17 @@ url = "https://files.pythonhosted.org/packages/3a/1b/3b16a9bc514a440a7a088368411
 sha256 = "a5fa86b80fd24bcd1aff83ad23be44ea323de3f787be8f8b15d4a65621e25321"
 
 [[packages]]
+name = "packaging"
+version = "26.0"
+
+[[packages.wheels]]
+name = "packaging-26.0-py3-none-any.whl"
+url = "https://files.pythonhosted.org/packages/b7/b9/c538f279a4e237a006a2c98387d081e9eb060d203d8ed34467cc0f0b9b53/packaging-26.0-py3-none-any.whl"
+
+[packages.wheels.hashes]
+sha256 = "b36f1fef9334a5588b4166f8bcd26a14e521f2b55e6b9de3aaa80d3ff7a37529"
+
+[[packages]]
 name = "pyside6"
 version = "6.11.2"
 
