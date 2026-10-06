@@ -6,7 +6,7 @@ dependencies = [
     "defusedxml==0.7.1",
     "ifcopenshell==0.8.5",
     "numpy==2.5.3",
-    "packaging==26.0",
+    "packaging==26.3",
     "PySide6==6.11.2",
     "requests==2.34.2",
     "scour==0.38.2",
